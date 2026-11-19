@@ -200,3 +200,101 @@ Other deals: Eerdmans to SPCK; Kogan Page and Otter-Barry to Hachette UK; Boldwo
 - Financials are missing for 9 of 10 targets.
 - Shifting the availability or antitrust weights by 5 points reorders places 3–9.
 - The top two (Dark Horse, Highlights) and the cluster of PRHPS-client tuck-ins hold up under weight changes.
+
+---
+
+# Antitrust and Regulatory Screen
+
+> Prepared by the `antitrust-counsel` agent, November 19, 2026. This is a risk screen for PRH's counsel of record to confirm, not legal advice.
+
+## Bottom line
+
+Nine of the ten targets are low or low-to-medium risk on their own.
+
+**Entangled is the only medium-to-high risk deal.** It directly tests the Simon & Schuster theory (fewer bidders for authors of anticipated top-selling books). It needs a full antitrust work-up before signing and S&S-style deal protections.
+
+The larger risk is **cumulative**. PRH is already the main book-trade distributor in comics and owns BOOM!. Adding Dark Horse and then IDW, Oni or Titan invites "serial acquisition" scrutiny, even if no single deal requires a filing.
+
+**Recommendation:** Dark Horse plus at most one small bolt-on, with a firewall on Publisher Services data in place before any approach.
+
+## Filing rules
+
+- **US (HSR, 2026), verified:**
+  - Filing is required for deals above **$133.9M**.
+  - Between $133.9M and $535.5M the size-of-person test also applies (the target needs about $26.8M+ in sales or assets); every deal above $535.5M is reportable.
+  - Fees are $35K below $189.6M and $110K up to $586.9M.
+  - The waiting period is 30 days. A second request typically adds 6–12 months.
+  - The expanded 2025 HSR form was vacated, and the old form has applied since March 2026 (the FTC's appeal is pending).
+  - Deals below the threshold can still be challenged.
+- **UK (CMA), not verified:**
+  - Filing is voluntary.
+  - The CMA has jurisdiction if the target has more than £100M UK turnover, or the deal creates or increases a 25% share of supply.
+  - A hybrid test also applies: one party with a 33% share and more than £350M UK turnover, plus a UK nexus. PRH UK may meet it in some categories.
+  - Deals where each party has under £10M UK turnover are in a safe harbour.
+- **EU / Germany / Austria, not verified:** EU thresholds won't be met. Germany requires a filing if the target has more than €17.5M German turnover, or the deal is over €400M with significant German activity; that is unlikely. Austria's transaction-value test applies above €200M.
+- **Australia (ACCC), unverified because the site was blocked:** notification has been **mandatory and suspensory since January 1, 2026**, with aggregation of serial deals. Recent PRH Australia deals (Text) may count toward it.
+
+## Per-target screen
+
+Deal sizes are the corp-dev estimates; filing calls are estimates.
+
+| # | Target | Risk | Key markets (sell side / author and license side) | Likely filings | Timing |
+|---|---|---|---|---|---|
+| 1 | Dark Horse | **L–M** | US comics, licensed comics, manga; bidding for comics licenses. PRH already distributes DC, Marvel and Dark Horse and owns BOOM! | HSR if over $133.9M | 3–4 months; 9–12 with a second request |
+| 2 | Highlights | **L** | Children's activity and early-learning books; magazines (no overlap) | HSR for the whole company; maybe none for books only | 2–4 months |
+| 3 | Shambhala | **L** | Mind-body-spirit and Buddhism; few authors at the $250K+ advance level | None | Sign and close |
+| 4 | Phaidon | **L** | Art, design, premium cookbooks; check overlap with Ten Speed and Clarkson | HSR possible; UK share-of-supply check | 2–4 months |
+| 5 | IDW | **L** alone / **M** with Dark Horse | Licensed comics (TMNT, Sonic); license bidding | None; OTC-listed company | 3–5 months |
+| 6 | Andrews McMeel | **L** | Calendars, gift, humor, poetry | HSR likely if over $133.9M | 2–4 months |
+| 7 | Titan | **L–M** | UK/US licensed tie-ins, comics, manga | HSR possible; UK hybrid test | 3–6 months |
+| 8 | Oni | **L** alone | Comics (Archie license) | None | Sign and close |
+| 9 | Entangled | **M–H** | **Rights to anticipated top-selling books ($250K+ advances)**; romantasy, romance, YA | HSR mandatory | Plan for a second request: **12–18-month outside date** |
+| 10 | Insight Editions | **L–M** | Licensed pop-culture books; **bidding for Lucasfilm, Marvel and WB licenses**, where DK and Insight may be the two leaders | HSR possible | 2–4 months; 9+ with a second request |
+
+**Mitigation by target:**
+- **Insight:** ring-fence the licenses where DK and Insight overlap, and get licensor support letters.
+- **Dark Horse:** document why it complements BOOM!, and commit to keep distribution open to other comics publishers on fair terms.
+- **Phaidon and Titan:** prepare UK share-of-supply analysis before deciding whether to brief the CMA.
+
+## Cross-cutting issues
+
+1. **Publisher Services client data (6 targets).** Using distributor-held sales, pricing and terms data to pick or price bids risks breach of contract and lost clients. It also creates an exclusionary-conduct story: PRH uses its distribution position to weaken independents, then buys them.
+   - **Mitigation:**
+     - A written firewall between Publisher Services data and the deal team.
+     - Target data obtained only through an NDA and a clean team.
+     - A review of each distribution contract's confidentiality and change-of-control terms (IDW's contract can be ended on a change of control).
+     - No linking of distribution terms to sale talks.
+     - Retire "acquisition pipeline" language for Publisher Services clients, and route strategy papers through counsel.
+2. **Comics roll-up.** The 2023 US Merger Guidelines treat a series of acquisitions as a pattern, and Australia aggregates serial deals by law. The risk is fewer rival bidders for licenses from IP owners and less choice for creators.
+   - **Do Dark Horse plus at most one of IDW, Oni or Titan.** Avoid Dark Horse plus IDW together, because both bid for the same licensors.
+   - Run a licensed-comics share and bidder study before a second deal.
+3. **Entangled and romantasy.** In the S&S trial the court accepted a market for anticipated top-sellers (from the agent's recollection, PRH had about 37% of it, and about 49% combined with S&S).
+   - Entangled's historically low advances point to lower risk.
+   - Its new Chernin capital and *Fourth Wing* brand point to higher risk, as a growing rival.
+   - Behavioral "imprints still compete" promises failed in the S&S case.
+   - **Options:** a distribution deal or co-publishing/IP partnership instead of control, an option to buy later, or a carefully sized reverse termination fee (the S&S failure cost $200M).
+   - A minority stake is not exempt from HSR when the buyer competes with the target.
+4. **Gun-jumping.** Before clearance, PRH must not direct the target's editorial work, author offers, pricing or hiring. It also must not pool advance budgets or share live auction information, or change distribution terms in anticipation of the deal.
+   - Routine Publisher Services contact must stay ordinary course and separate from deal staff.
+   - The integration team should only plan, through a clean team.
+   - HSR penalties exceed $50K per day.
+
+## Ranked risks
+
+1. Entangled: second request or challenge under the S&S theory; its private equity minority holder adds complexity.
+2. Cumulative comics roll-up on top of PRH's comics distribution position.
+3. Misuse of Publisher Services data or poor document hygiene.
+4. Gun-jumping through existing Publisher Services relationships.
+5. Insight with DK: licensed illustrated publishing and license bidding.
+6. Australia's mandatory notice through serial aggregation; UK hybrid-test exposure on Titan and Phaidon.
+
+## Data requests
+
+- **Entangled:** $250K+ advance bids, wins and losses against PRH imprints, romantasy share, and its shareholder agreement.
+- **Comics:** shares by format and channel, and a map of who bids for which licenses.
+- **Every target:** US, UK, German and Australian turnover.
+- **PRH:** UK share of supply by category, Australian turnover, PRH Australia deals over the past three years, the Publisher Services distribution agreements, and the current firewall policy.
+
+**Confidence: medium.** The 2026 HSR thresholds and the form status are verified. The UK, German and Austrian thresholds come from the agent's own knowledge, and the Australian figures are unverified. Target financials are mostly missing, so the ratings are judgment.
+
+**Sources:** [FTC 2026 HSR thresholds](https://www.ftc.gov/enforcement/competition-matters/2026/01/new-hsr-thresholds-filing-fees-2026) · [WilmerHale](https://www.wilmerhale.com/en/sitecore/content/whlaunch/home/research/news-publications/20260319-whats-old-is-new-again-fifth-circuit-lifts-stay-new-hsr-form-is-vacated) · [White & Case](https://www.whitecase.com/insight-alert/hsr-rewind-new-hsr-rules-are-vacated-and-parties-return-old-hsr-form) · [Allens on the ACCC regime](https://www.allens.com.au/insights-news/insights/2025/12/merger-reforms-a-mandatory-and-suspensory-merger-regime-with-the-ACCC-as-decision-maker/)
