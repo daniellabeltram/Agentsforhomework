@@ -59,6 +59,49 @@ Unless asked otherwise, reply with:
 """
 
 # ---------------------------------------------------------------------------
+# Run limits (guardrails against runaway agents)
+# ---------------------------------------------------------------------------
+# max_turns   Claude Code `maxTurns`: hard stop on agentic turns.
+# effort      Reasoning effort (Claude Code `effort`, Managed Agents model effort).
+# searches    Web searches allowed per task (enforced by the prompt).
+# fetches     Full-page reads allowed per task (enforced by the prompt).
+# budget_usd  Hard spend cap for one Managed Agents session (session budget).
+#
+# Every role gets a tier; a role may override single values with "limits".
+
+TIERS: dict[str, dict] = {
+    # Answers from expertise plus a little lookup: legal, publishing, rights, integration.
+    "advisor": {"max_turns": 15, "effort": "medium", "searches": 6, "fetches": 4, "budget_usd": 3},
+    # Builds models in Python: valuation, diligence, catalog, tax.
+    "modeler": {"max_turns": 25, "effort": "high", "searches": 8, "fetches": 6, "budget_usd": 6},
+    # Research-heavy: sourcing and ranking targets.
+    "researcher": {"max_turns": 30, "effort": "high", "searches": 15, "fetches": 10, "budget_usd": 8},
+}
+
+COORDINATOR_LIMITS = {
+    "budget_usd": 30,           # shared by the coordinator and every specialist thread
+    "max_parallel": 5,          # specialists working at once on a first look
+    "max_rounds": 2,            # follow-up rounds per specialist before deciding
+}
+
+
+def limits_for(role: dict) -> dict:
+    return {**TIERS[role["tier"]], **role.get("limits", {})}
+
+
+def work_budget(lim: dict) -> str:
+    return f"""\
+## Work budget (hard limits)
+
+- At most **{lim['searches']} web searches** and **{lim['fetches']} full-page fetches** per task. Plan your searches before you start; do not repeat near-identical queries.
+- Aim to finish within **{lim['max_turns']} turns**. If you are halfway through your budget without an answer, narrow the question rather than widen the search.
+- When you hit a limit, **stop and deliver** what you have, marked **PARTIAL**, with a list of what is unverified and what you would do next. A partial answer on time beats a complete answer that never arrives.
+- Do not chase tangents, rabbit-hole on one source, or re-verify facts already given in the PRH context below.
+- Keep the final reply under about 1,200 words unless the task explicitly asks for more.
+"""
+
+
+# ---------------------------------------------------------------------------
 # The 15 roles
 # ---------------------------------------------------------------------------
 # modeler=True gives the agent shell/code execution (Bash in Claude Code, bash in Managed Agents)
@@ -67,6 +110,7 @@ Unless asked otherwise, reply with:
 ROLES: list[dict] = [
     {
         "name": "corp-dev-lead",
+        "tier": "researcher", "limits": {"searches": 10, "fetches": 6, "max_turns": 20},
         "title": "Corporate Development / M&A Lead",
         "color": "blue",
         "modeler": False,
@@ -97,6 +141,7 @@ Valuation to `valuation-modeler`; process and pricing tactics to `investment-ban
     },
     {
         "name": "investment-banker",
+        "tier": "advisor",
         "title": "Investment Banker / M&A Advisor",
         "color": "purple",
         "modeler": False,
@@ -126,6 +171,7 @@ Detailed model to `valuation-modeler`; legal drafting to `ma-transaction-attorne
     },
     {
         "name": "valuation-modeler",
+        "tier": "modeler",
         "title": "Valuation and Financial Modeling Expert",
         "color": "green",
         "modeler": True,
@@ -156,6 +202,7 @@ Catalog decay assumptions from `backlist-catalog-analyst`; quality of earnings a
     },
     {
         "name": "trade-publishing-exec",
+        "tier": "advisor",
         "title": "Trade Publishing Executive",
         "color": "orange",
         "modeler": False,
@@ -184,6 +231,7 @@ Catalog valuation to `backlist-catalog-analyst`; author contracts to `royalties-
     },
     {
         "name": "backlist-catalog-analyst",
+        "tier": "modeler",
         "title": "Backlist and Catalog Valuation Specialist",
         "color": "yellow",
         "modeler": True,
@@ -214,6 +262,7 @@ Reversion and contract terms to `royalties-contracts-specialist` and `ip-copyrig
     },
     {
         "name": "rights-licensing-expert",
+        "tier": "advisor",
         "title": "Rights and Licensing Expert",
         "color": "pink",
         "modeler": False,
@@ -242,6 +291,7 @@ Contract-level terms to `royalties-contracts-specialist`; ownership and chain-of
     },
     {
         "name": "royalties-contracts-specialist",
+        "tier": "modeler",
         "title": "Royalties and Author Contracts Specialist",
         "color": "cyan",
         "modeler": True,
@@ -271,6 +321,7 @@ Legal interpretation to `ma-transaction-attorney` and `ip-copyright-attorney`; f
     },
     {
         "name": "distribution-supply-chain-expert",
+        "tier": "modeler",
         "title": "Distribution, Sales Channel and Supply Chain Expert",
         "color": "orange",
         "modeler": True,
@@ -300,6 +351,7 @@ Synergies into the model with `valuation-modeler`; integration sequencing with `
     },
     {
         "name": "antitrust-counsel",
+        "tier": "advisor", "limits": {"searches": 8, "fetches": 5},
         "title": "Antitrust and Competition Counsel",
         "color": "red",
         "modeler": False,
@@ -329,6 +381,7 @@ Deal documents to `ma-transaction-attorney`; market-share data to `market-intel-
     },
     {
         "name": "ma-transaction-attorney",
+        "tier": "advisor",
         "title": "M&A Transaction Attorney",
         "color": "red",
         "modeler": False,
@@ -355,6 +408,7 @@ IP ownership to `ip-copyright-attorney`; antitrust to `antitrust-counsel`; tax s
     },
     {
         "name": "ip-copyright-attorney",
+        "tier": "advisor",
         "title": "IP, Copyright and Data Privacy Attorney",
         "color": "pink",
         "modeler": False,
@@ -380,6 +434,7 @@ Contract economics to `royalties-contracts-specialist`; purchase agreement prote
     },
     {
         "name": "financial-due-diligence",
+        "tier": "modeler",
         "title": "Financial Due Diligence / Quality of Earnings Specialist",
         "color": "green",
         "modeler": True,
@@ -409,6 +464,7 @@ Adjusted figures to `valuation-modeler`; tax items to `tax-accounting-specialist
     },
     {
         "name": "tax-accounting-specialist",
+        "tier": "modeler",
         "title": "Tax Structuring and Acquisition Accounting Specialist",
         "color": "yellow",
         "modeler": True,
@@ -436,6 +492,7 @@ Price and returns to `valuation-modeler`; legal structure to `ma-transaction-att
     },
     {
         "name": "integration-lead",
+        "tier": "advisor",
         "title": "Post-Merger Integration Lead",
         "color": "blue",
         "modeler": False,
@@ -462,6 +519,7 @@ Synergy numbers with `valuation-modeler`; distribution moves with `distribution-
     },
     {
         "name": "market-intel-analyst",
+        "tier": "researcher",
         "title": "Market and Competitive Intelligence Analyst",
         "color": "cyan",
         "modeler": True,
@@ -527,7 +585,12 @@ def q(s: str) -> str:
 
 
 def system_prompt(role: dict, repo_note: bool) -> str:
-    parts = [role["body"].rstrip(), "", PRH_CONTEXT.rstrip(), "", OPERATING_RULES.rstrip()]
+    parts = [
+        role["body"].rstrip(), "",
+        work_budget(limits_for(role)).rstrip(), "",
+        PRH_CONTEXT.rstrip(), "",
+        OPERATING_RULES.rstrip(),
+    ]
     if repo_note:
         parts += [
             "",
@@ -549,6 +612,8 @@ def write_claude_code(role: dict) -> Path:
         f"description: {q(role['description'])}",
         f"tools: {', '.join(tools)}",
         "model: inherit",
+        f"effort: {limits_for(role)['effort']}",
+        f"maxTurns: {limits_for(role)['max_turns']}",
         f"color: {role['color']}",
         "---",
         "",
@@ -577,9 +642,10 @@ def write_managed(role: dict) -> Path:
         "---",
         f"name: {q('PRH ' + role['title'])}",
         f"description: {q(role['description'])}",
-        f"model: {{id: {MODEL_ID}, effort: high}}",
+        f"model: {{id: {MODEL_ID}, effort: {limits_for(role)['effort']}}}",
         *toolset_yaml(role["modeler"]),
-        "metadata: {project: prh-ma, role: " + role["name"] + "}",
+        "metadata: {project: prh-ma, role: " + role["name"] + ", session_budget_usd: '"
+        + str(limits_for(role)["budget_usd"]) + "'}",
         "---",
         "",
     ]
@@ -610,7 +676,8 @@ def write_coordinator() -> Path:
         "    inline_agents: {type: disabled}",
         "    predefined_agents:",
         *roster_lines,
-        "metadata: {project: prh-ma, role: deal-team-lead}",
+        "metadata: {project: prh-ma, role: deal-team-lead, session_budget_usd: '"
+        + str(COORDINATOR_LIMITS["budget_usd"]) + "'}",
         "---",
         "",
     ]
@@ -624,8 +691,16 @@ You lead a virtual M&A deal team for Penguin Random House executives. You do not
 ## How to delegate
 
 - For a quick question in one specialist's area, send it to that specialist alone.
-- For a full first look at a potential target, send tasks in parallel to `corp-dev-lead`, `market-intel-analyst`, `trade-publishing-exec`, `antitrust-counsel` and `valuation-modeler`; add other specialists as the target's profile requires (catalog-heavy: `backlist-catalog-analyst`; IP or comics: `rights-licensing-expert`; DTC: `ip-copyright-attorney` for data privacy; cross-border: `tax-accounting-specialist`).
-- For confirmatory diligence on a deal heading to signing, or for screening many targets at once, start a workflow run that fans the work out across the specialists in phases (research, then analysis, then synthesis) rather than delegating one at a time.
+- For a full first look at a potential target, send tasks in parallel to `corp-dev-lead`, `market-intel-analyst`, `trade-publishing-exec`, `antitrust-counsel` and `valuation-modeler`; add other specialists only when the target's profile requires it (catalog-heavy: `backlist-catalog-analyst`; IP or comics: `rights-licensing-expert`; DTC: `ip-copyright-attorney` for data privacy; cross-border: `tax-accounting-specialist`).
+- Start a workflow run only when the user explicitly asks for confirmatory diligence on a deal heading to signing, or to screen more than five targets at once. Otherwise delegate directly.
+
+## Limits (hard)
+
+- No more than **{COORDINATOR_LIMITS['max_parallel']} specialists working at once**, and no more than **{COORDINATOR_LIMITS['max_rounds']} rounds** with any one specialist (the first task plus one follow-up). If they still disagree after that, report the disagreement instead of asking again.
+- The whole session, including every specialist, runs under a spend cap of about **${COORDINATOR_LIMITS['budget_usd']}**. Spend it on the questions that change the decision.
+- If a specialist returns a PARTIAL answer, use it; do not re-send the same task.
+- Do not do the specialists' research yourself. You may run at most 3 web searches of your own, only to frame tasks.
+- Keep the final summary under about 1,500 words.
 - Specialists see none of your conversation. Every task must include the target name, the facts and documents you have, the exact question, and the reply format.
 - Do not delegate trivial look-ups you can answer from the context below.
 
@@ -662,6 +737,20 @@ config:
     return path
 
 
+def write_budgets() -> Path:
+    """Per-agent run limits for the app; session budgets are set when a session is created."""
+    data = {
+        "_note": "budget_usd is the hard spend cap to pass as the Managed Agents session budget. "
+                 "Keys match the agent files in agents/.",
+        "deal-team-lead": {"budget_usd": COORDINATOR_LIMITS["budget_usd"], **{
+            k: v for k, v in COORDINATOR_LIMITS.items() if k != "budget_usd"}},
+        **{r["name"]: limits_for(r) for r in ROLES},
+    }
+    path = MANAGED_DIR / "budgets.json"
+    path.write_text(json.dumps(data, indent=2) + "\n")
+    return path
+
+
 def main() -> None:
     CLAUDE_CODE_DIR.mkdir(parents=True, exist_ok=True)
     (MANAGED_DIR / "agents").mkdir(parents=True, exist_ok=True)
@@ -669,7 +758,7 @@ def main() -> None:
     assert len(ROLES) == 15, len(ROLES)
     written = [write_claude_code(r) for r in ROLES]
     written += [write_managed(r) for r in ROLES]
-    written += [write_coordinator(), write_environment()]
+    written += [write_coordinator(), write_environment(), write_budgets()]
     for p in written:
         print(p.relative_to(REPO))
 

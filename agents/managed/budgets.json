@@ -1,0 +1,113 @@
+{
+  "_note": "budget_usd is the hard spend cap to pass as the Managed Agents session budget. Keys match the agent files in agents/.",
+  "deal-team-lead": {
+    "budget_usd": 30,
+    "max_parallel": 5,
+    "max_rounds": 2
+  },
+  "corp-dev-lead": {
+    "max_turns": 20,
+    "effort": "high",
+    "searches": 10,
+    "fetches": 6,
+    "budget_usd": 8
+  },
+  "investment-banker": {
+    "max_turns": 15,
+    "effort": "medium",
+    "searches": 6,
+    "fetches": 4,
+    "budget_usd": 3
+  },
+  "valuation-modeler": {
+    "max_turns": 25,
+    "effort": "high",
+    "searches": 8,
+    "fetches": 6,
+    "budget_usd": 6
+  },
+  "trade-publishing-exec": {
+    "max_turns": 15,
+    "effort": "medium",
+    "searches": 6,
+    "fetches": 4,
+    "budget_usd": 3
+  },
+  "backlist-catalog-analyst": {
+    "max_turns": 25,
+    "effort": "high",
+    "searches": 8,
+    "fetches": 6,
+    "budget_usd": 6
+  },
+  "rights-licensing-expert": {
+    "max_turns": 15,
+    "effort": "medium",
+    "searches": 6,
+    "fetches": 4,
+    "budget_usd": 3
+  },
+  "royalties-contracts-specialist": {
+    "max_turns": 25,
+    "effort": "high",
+    "searches": 8,
+    "fetches": 6,
+    "budget_usd": 6
+  },
+  "distribution-supply-chain-expert": {
+    "max_turns": 25,
+    "effort": "high",
+    "searches": 8,
+    "fetches": 6,
+    "budget_usd": 6
+  },
+  "antitrust-counsel": {
+    "max_turns": 15,
+    "effort": "medium",
+    "searches": 8,
+    "fetches": 5,
+    "budget_usd": 3
+  },
+  "ma-transaction-attorney": {
+    "max_turns": 15,
+    "effort": "medium",
+    "searches": 6,
+    "fetches": 4,
+    "budget_usd": 3
+  },
+  "ip-copyright-attorney": {
+    "max_turns": 15,
+    "effort": "medium",
+    "searches": 6,
+    "fetches": 4,
+    "budget_usd": 3
+  },
+  "financial-due-diligence": {
+    "max_turns": 25,
+    "effort": "high",
+    "searches": 8,
+    "fetches": 6,
+    "budget_usd": 6
+  },
+  "tax-accounting-specialist": {
+    "max_turns": 25,
+    "effort": "high",
+    "searches": 8,
+    "fetches": 6,
+    "budget_usd": 6
+  },
+  "integration-lead": {
+    "max_turns": 15,
+    "effort": "medium",
+    "searches": 6,
+    "fetches": 4,
+    "budget_usd": 3
+  },
+  "market-intel-analyst": {
+    "max_turns": 30,
+    "effort": "high",
+    "searches": 15,
+    "fetches": 10,
+    "budget_usd": 8
+  }
+}

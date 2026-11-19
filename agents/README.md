@@ -31,6 +31,28 @@ Each agent is generated in two formats from one source, [`build_agents.py`](./bu
 
 Every agent shares the same PRH context (financials, leadership, deal history, playbook) and the same operating rules: separate facts from estimates, cite sources, keep deal information confidential, defer to licensed counsel, and answer in a fixed format (bottom line, key findings, risks, open questions, confidence).
 
+## Run limits (guardrails against runaway agents)
+
+Every agent belongs to a tier, with a few per-role overrides. The limits are set in `TIERS` in `build_agents.py`:
+
+| Tier | Agents | Turn cap | Effort | Web searches | Page fetches | Session cap |
+|---|---|---|---|---|---|---|
+| Advisor | investment-banker, trade-publishing-exec, rights-licensing-expert, antitrust-counsel (8 searches / 5 fetches), ma-transaction-attorney, ip-copyright-attorney, integration-lead | 15 | medium | 6 | 4 | $3 |
+| Modeler | valuation-modeler, backlist-catalog-analyst, royalties-contracts-specialist, distribution-supply-chain-expert, financial-due-diligence, tax-accounting-specialist | 25 | high | 8 | 6 | $6 |
+| Researcher | market-intel-analyst; corp-dev-lead (20 turns, 10 searches, 6 fetches) | 30 | high | 15 | 10 | $8 |
+| Coordinator | deal-team-lead: at most 5 specialists at once, 2 rounds each, 3 own searches | – | high | – | – | $30 shared |
+
+How each limit is enforced:
+
+- **Turn cap**: `maxTurns` in each Claude Code subagent. Claude Code stops the agent when it is reached.
+- **Effort**: `effort` in Claude Code and on the Managed Agents model. Advisors run at `medium` to stay quick.
+- **Search and fetch caps**: written into each agent's prompt as a "Work budget". When the agent hits a limit it must stop and return what it has, marked **PARTIAL**, with a list of gaps, instead of continuing to search.
+- **Session cap (Managed Agents)**: a hard spend ceiling enforced by the platform. The app passes it as the session `budget` when it creates the session, using the amounts in `agents/managed/budgets.json`. At the cap the session pauses with `stop_reason: budget_reached`. It keeps its history and resumes if the cap is raised.
+- **Coordinator limits**: written into `deal-team-lead`'s prompt. Dynamic workflows run only when the user explicitly asks for confirmatory diligence or a screen of more than five targets.
+- **Output length**: about 1,200 words for specialists and 1,500 for the coordinator.
+
+The search and fetch caps are prompt instructions: agents follow them reliably, but the platform doesn't enforce them. The turn caps (Claude Code) and the session spend caps (Managed Agents) are the hard backstops.
+
 ## Editing the agents
 
 Edit `ROLES`, `PRH_CONTEXT` or `OPERATING_RULES` in `build_agents.py`, then regenerate both formats:
@@ -103,11 +125,16 @@ lock = json.load(open("agents/managed/claude-lock.json"))["resources"]
 agent_id = lock["./agents/deal-team-lead.md"]["id"]
 env_id = lock["./environments/prh-ma-research.yaml"]["id"]
 
+budgets = json.load(open("agents/managed/budgets.json"))
+cap_cents = str(budgets["deal-team-lead"]["budget_usd"] * 100)  # "3000" = $30.00
+
 client = anthropic.Anthropic()
 session = client.beta.sessions.create(
     agent=agent_id,
     environment_id=env_id,
     title="First look: example target",
+    # Hard spend cap: the session pauses with stop_reason "budget_reached" at the cap.
+    budget={"type": "limit", "max_list_cost": {"amount": cap_cents, "currency": "USD"}},
 )
 client.beta.sessions.events.send(
     session_id=session.id,
