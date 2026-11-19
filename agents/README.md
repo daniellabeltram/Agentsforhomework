@@ -77,7 +77,7 @@ agents/managed/
 
 ### Deploy
 
-You need the [`ant` CLI](https://platform.claude.com/docs/en/api/cli) 1.40.0 or later and a Claude API key (`ant auth login`). Run from `agents/managed/` so `claude-lock.json` lives there:
+You need the [`ant` CLI](https://platform.claude.com/docs/en/cli-sdks-libraries/cli/quickstart) 1.40.0 or later and a Claude API key (`ant auth login`). Run from `agents/managed/` so `claude-lock.json` lives there:
 
 ```bash
 cd agents/managed
