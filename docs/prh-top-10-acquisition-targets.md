@@ -298,3 +298,74 @@ Deal sizes are the corp-dev estimates; filing calls are estimates.
 **Confidence: medium.** The 2026 HSR thresholds and the form status are verified. The UK, German and Austrian thresholds come from the agent's own knowledge, and the Australian figures are unverified. Target financials are mostly missing, so the ratings are judgment.
 
 **Sources:** [FTC 2026 HSR thresholds](https://www.ftc.gov/enforcement/competition-matters/2026/01/new-hsr-thresholds-filing-fees-2026) · [WilmerHale](https://www.wilmerhale.com/en/sitecore/content/whlaunch/home/research/news-publications/20260319-whats-old-is-new-again-fifth-circuit-lifts-stay-new-hsr-form-is-vacated) · [White & Case](https://www.whitecase.com/insight-alert/hsr-rewind-new-hsr-rules-are-vacated-and-parties-return-old-hsr-form) · [Allens on the ACCC regime](https://www.allens.com.au/insights-news/insights/2025/12/merger-reforms-a-mandatory-and-suspensory-merger-regime-with-the-ACCC-as-decision-maker/)
+
+---
+
+# First-Pass Valuation
+
+> Prepared by the `valuation-modeler` agent, November 19, 2026. The model is in [`../models/top10_valuation.py`](../models/top10_valuation.py) and its output in [`../models/top10_valuation.csv`](../models/top10_valuation.csv). Run `python3 models/top10_valuation.py` to reproduce. Every input sits at the top of the script.
+>
+> USD millions, target local GAAP (not converted to IFRS). **Estimates only.** Only IDW publishes financials; the other nine targets' revenue is estimated, so the ranges are wide (about ±50–100%). Use these figures for ranking and rough sizing, not for pricing.
+
+## Bottom line
+
+- **Combined value:** standalone value across all ten is about **$1.03B** at the midpoint. Risk-weighted synergies after integration costs add about **$175M**.
+- **Thin synergies for distribution clients:** for the six PRH Publisher Services clients, PRH already earns the distribution fee, so buying them only moves that fee inside the group.
+- **Returns:** at the target prices below, year-3 return on invested capital (ROIC) is **7–10%**, around a placeholder 9% hurdle rate. Most of these deals only work at disciplined prices, or with stronger synergy or growth cases than assumed here.
+- **Best value per dollar:** Andrews McMeel, Insight and Titan.
+- **Entangled** is fully priced at its reported $400M valuation.
+
+| # | Target | Revenue (basis) | Multiples: EV/revenue · EV/EBITDA | Standalone value: low / mid / high | Net synergy value | Opening / target / walk-away price | Year-3 ROIC |
+|---|---|---|---|---|---|---|---|
+| 1 | Dark Horse | 70–110 (est.) | 1.0–1.8x · 9–13x | 60 / 117 / 199 | 18 | 106 / 122 / 126 | 7% |
+| 2 | Highlights (whole company) | 120–250 (est.) | 1.0–1.8x · 8–12x | 98 / 236 / 450 | 27 | 212 / 243 / 249 | 7% |
+| 3 | Shambhala | 8–15 (est.) | 1.0–1.7x · 8–12x | 7 / 14 / 26 | 3 | 13 / 15 / 16 | 8% |
+| 4 | Phaidon | 38–42 (GBP 31.3M FY Jun-24, aggregator) | 0.8–1.3x · 8–11x | 20 / 31 / 46 | 13 | 28 / 35 / 38 | 8% |
+| 5 | IDW | 21–24 (**reported** $23.16M) | 0.4–0.9x · n.m. | 8 / 13 / 15 | 7 | 12 / 15 / 17* | 2% |
+| 6 | Andrews McMeel | 100–140 (est.) | 0.8–1.3x · 7–10x | 75 / 127 / 196 | 39 | 114 / 136 / 146 | 10% |
+| 7 | Titan | 45–75 (est.) | 0.7–1.2x · 7–10x | 27 / 53 / 90 | 11 | 47 / 56 / 58 | 9% |
+| 8 | Oni Press | 8–15 (est.) | 0.4–0.9x · 7–10x | 3 / 6 / 13 | 4 | 5 / 7 / 8 | 9% |
+| 9 | Entangled | 100–200 (est.) | 1.8–3.2x · 9–14x | 171 / 395 / 740 | 38 | 355 / 404 / 414 | 7% |
+| 10 | Insight (+Weldon Owen) | 35–60 (est.) | 0.6–1.1x · 7–10x | 18 / 38 / 69 | 16 | 35 / 42 / 46 | 10% |
+
+\* IDW's walk-away price is above its standalone high, so synergies would be justifying the price.
+
+## Key assumptions
+
+- **Comparables:**
+  - Seven Seas sold at about 1.6x revenue.
+  - Cottage Door sold for about $71M (anchors deal size only).
+  - Entangled's $400M is a minority-round valuation.
+  - Podium sold for $400M+.
+  - Two Simon & Schuster deals, quoted from memory and still to verify: KKR's 2023 purchase at about 1.4x revenue and 7–8x EBITDA; PRH's blocked deal at about 2.2x revenue and 11–12x EBITDA.
+- **EBITDA margins:** estimates, from −8% (IDW) to 30% (Entangled). Standalone value is the average of the revenue-multiple and EBITDA-multiple methods (revenue method only where EBITDA is negative).
+- **Cost synergies:** Publisher Services clients 1.5–5% of revenue (back office, printing, rights). Non-clients 3–7%, including moving distribution to PRH.
+- **Revenue synergies:** 1–5% of revenue at 30% flow-through, weighted at 40% probability. Cost synergies are weighted at 75%.
+- **Timing and costs:** synergies phase in 40% / 80% / 100% over years 1–3. One-off integration costs are 1.25x run-rate cost synergies.
+- **Discounting:** 9% WACC (placeholder), 1% terminal growth, 25% tax. GBP/USD 1.27.
+- **Pricing rules:** opening bid = 90% of standalone midpoint; target price = midpoint + 25% of net synergies; walk-away price = midpoint + 50% of net synergies.
+
+## Risks
+
+1. **Revenue is a guess for 9 of 10 targets.** A 2x revenue error moves value more than any multiple or synergy choice.
+2. **Entangled is a peak-cycle minority mark.** Buying control would likely cost more than $400M. It does not clear the hurdle as modelled.
+3. **Licenses may not survive a sale** (IDW, Oni, Titan, Insight). Licensor consent and license churn could remove 30–60% of value.
+4. **Publisher Services data** was not used. Using it needs legal clearance and a firewall (see the antitrust section).
+5. **Dark Horse carve-out:** rights cross-held with Embracer could shrink what PRH actually buys.
+6. **Thin margins at Phaidon and Andrews McMeel:** a quality-of-earnings review could cut EBITDA.
+
+## Data requests
+
+- **From targets:** three years of revenue, EBITDA, frontlist/backlist split, returns, unearned advances, inventory reserves and license schedules.
+- **From Companies House:** Phaidon and Titan accounts (free; would firm up two rows).
+- **From IDW:** current market cap and net debt.
+- **Highlights:** books-only revenue, since a books-only deal is the more likely structure.
+- **From PRH:** its actual hurdle rate and WACC, and Bertelsmann's 2027 M&A budget.
+- **Follow-ups:**
+  - `backlist-catalog-analyst`: decay curves.
+  - `financial-due-diligence`: quality of earnings.
+  - `tax-accounting-specialist`: tax rate and purchase price allocation.
+
+**Confidence:** low on individual values; medium on relative ordering and pricing discipline. The model is reproducible, and inputs can be swapped in as real figures arrive.
+
+**Sources:** [Bookseller: Phaidon](https://thebookseller.com/news/phaidon-bounces-back-to-profit-with-8-increase-in-turnover) · [Endole: Phaidon](https://open.endole.co.uk/insight/company/02525791-phaidon-press-limited) · [Embracer acquires Dark Horse](https://www.gamedeveloper.com/press-release/embracer-group-enters-into-an-agreement-to-acquire-dark-horse-and-forms-the-tenth-operative-group) · [PW 2020: AMU](https://publishersweekly.com/pw/print/20200217/82453-big-house-on-the-prairie.html) · [PW 2011: Shambhala](https://www.publishersweekly.com/pw/print/20110103/45649-new-generation-takes-over-at-shambhala.html) · [Publishers Lunch: Entangled](https://lunch.publishersmarketplace.com/2025/12/chernin-group-invests-in-entangled-valued-at-400-million-to-expand-ip/) · [PW 2024: Fourth Wing sales](https://www.publishersweekly.com/pw/print/20241216/96732-pw-s-2024-person-of-the-year-liz-pelletier.html) · [StockAnalysis: IDW](https://stockanalysis.com/quote/otc/IDWM/revenue/) · aggregator estimates (Growjo, LeadIQ, CorpSignals)
